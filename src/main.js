@@ -5,6 +5,10 @@
 import Vue from 'vue'
 import App from './App.vue'
 import router from './router/index'
+import NavHeader from './components/NavHeader/NavHeader.vue'
+
+//注册全局组件，需要的地方直接引入即可
+Vue.component('NavHeader', NavHeader)
 
 new Vue({
   el: '#app',
