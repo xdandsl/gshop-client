@@ -7,9 +7,11 @@ import App from './App.vue'
 import router from './router/index'
 import NavHeader from './components/NavHeader/NavHeader.vue'
 import store from './store/index'
+import Stars from './components/Stars/Stars.vue'
 
 //注册全局组件，需要的地方直接引入即可
 Vue.component('NavHeader', NavHeader)
+Vue.component('Stars', Stars)
 
 new Vue({
   el: '#app',
