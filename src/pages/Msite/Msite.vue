@@ -129,7 +129,12 @@
   //引入shopList组件
   import ShopList from '../../components/ShopList/ShopList.vue'
   export default {
-
+    mounted(){
+      //组件中，根据需要，在不同的状态，通过dispatch方法去对应的action方法
+      this.$store.dispatch('getAddress')
+      this.$store.dispatch('getCategorys')
+      this.$store.dispatch('getShops')
+    },
     //注册组件
     components: {
       ShopList

@@ -6,6 +6,7 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router/index'
 import NavHeader from './components/NavHeader/NavHeader.vue'
+import store from './store/index'
 
 //注册全局组件，需要的地方直接引入即可
 Vue.component('NavHeader', NavHeader)
@@ -22,6 +23,8 @@ new Vue({
   render: h => h(App),
 
   //注册路由器。因此所有的路由组件多了$router属性以及$route
-  router
+  router,
+  //注册路由器store对象。所有组件对象多了一个$store属性
+  store
 
 })

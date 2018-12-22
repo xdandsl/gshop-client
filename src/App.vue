@@ -9,13 +9,8 @@
 <!--js模块对象-->
 <script>
   import FooterGuide from './components/FooterGuide/FooterGuide.vue'
-  import {reqAddress , reqCategorys} from './api/index'
 
   export default {
-   async mounted(){
-     const result = await reqCategorys()
-     console.log(result)
-    },
     components: {
       FooterGuide
     }
