@@ -4,7 +4,7 @@
   <section class="profile">
     <NavHeader title="我的"/>
     <section class="profile-number">
-      <a href="javascript:" class="profile-link">
+      <a href="javascript:" class="profile-link" @click="$router.replace('/login')">
         <div class="profile_image">
           <i class="iconfont icon-person"></i>
         </div>

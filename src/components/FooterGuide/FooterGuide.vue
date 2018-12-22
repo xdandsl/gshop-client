@@ -1,6 +1,7 @@
 <!--模板页面-->
 <template>
-  <footer class="footer_guide border-1px">
+  <!--通过判断$route.meta.isShow是否存在，来决定底部是否显示。给页面的4个主组件添加了meta对象-->
+  <footer class="footer_guide border-1px" v-show="($route.meta.isShow ? $route.meta.isShow : false)">
     <a href="javascript:;" class="guide_item" :class="{on: $route.path === '/msite'}" @click="goTo('/msite')">
       <span class="item_icon">
         <i class="iconfont icon-waimai"></i>
