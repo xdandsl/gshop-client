@@ -2,7 +2,7 @@
 <template>
   <section class="msite">
     <!--首页头部-->
-    <NavHeader title="昌平区北七家宏福科技园(337省道北)">
+    <NavHeader :title="address.name">
       <span class="header_search" slot="left">
         <i class="iconfont icon-sousuo"></i>
       </span>
@@ -128,12 +128,16 @@
 <script>
   //引入shopList组件
   import ShopList from '../../components/ShopList/ShopList.vue'
+  import {mapState} from 'vuex'
   export default {
     mounted(){
       //组件中，根据需要，在不同的状态，通过dispatch方法去对应的action方法
       this.$store.dispatch('getAddress')
       this.$store.dispatch('getCategorys')
       this.$store.dispatch('getShops')
+    },
+    computed: {
+      ...mapState(['address'])
     },
     //注册组件
     components: {
