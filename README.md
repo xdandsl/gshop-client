@@ -1,21 +1,12 @@
-# gshop
 
-> A Vue.js project
+day03
+（一），轮播图
+1，实现静态页面。利用swiper技术，配置swiper对象来实现需求。（下载包，引入文件，根据文档）
+    问题：哪里创建swiper对象？ 列表数据显示之后，即在mounted生命周期函数中去创建。
 
-## Build Setup
+2，显示动态数据
+   1）组件触发action对象，发送ajax请求，从后台获取数据保存到状态数据中（之前定义好，现在直接触发action调用即可）
+   2）组件对应去读取状态数据（数组）进行显示。
+   问题：每一屏都需要遍历数组，而我们得到的
 
-``` bash
-# install dependencies
-npm install
 
-# serve with hot reload at localhost:8080
-npm run dev
-
-# build for production with minification
-npm run build
-
-# build for production and view the bundle analyzer report
-npm run build --report
-```
-
-For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
