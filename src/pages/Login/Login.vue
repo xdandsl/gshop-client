@@ -41,7 +41,7 @@
               </section>
               <section class="login_message">
                 <input type="text" maxlength="11" placeholder="验证码">
-                <img class="get_verification" src="./images/captcha.svg" alt="captcha">
+                <img ref="captcha" class="get_verification" src="http://localhost:5000/captcha" alt="captcha" @click="updateCaptcha">
               </section>
             </section>
           </div>
@@ -58,6 +58,9 @@
 
 <!--js模块对象-->
 <script>
+  import {reqSendCode} from '../../api/index'
+  import { MessageBox, Toast} from 'mint-ui'
+
   export default {
     data(){
       return {
@@ -75,17 +78,36 @@
       }
     },
     methods: {
-      sendCode(){
-        //发送验证码
+      //发送验证码
+      async sendCode(){
         this.computeTime = 30
         //每隔一秒减1秒
         const intervalId = setInterval(()=> {
           this.computeTime--
           //不能一直减
-          if(this.computeTime<0){
+          if(this.computeTime<=0){
+            this.computeTime = 0
             clearInterval(intervalId)
           }
         },1000)
+        //发送短信验证码(发送ajax请求)
+        const result = await reqSendCode(this.phoneNumber)
+        //根据返回的code提示对应信息
+        if(result.code === 0){
+          //短信发送成功
+          Toast('短信发送成功')
+        }else if(result.code === 1){
+          this.computeTime = 0
+          //短信发送失败
+          MessageBox.alert(result.msg)
+        }
+      },
+
+      //点击获取图形验证码：本质是重新发送请求，改变src
+      updateCaptcha(){
+        //如何获取img元素
+        //设置src属性，路径发生变化：携带时间戳，浏览器会自动发送请求获取新图片
+        this.$refs.captcha.src = `http://localhost:5000/captcha?time=${Date.now()}`
       }
     }
   }
