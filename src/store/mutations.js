@@ -1,7 +1,13 @@
 /**
  * 包含n个用来直接更新状态数据方法的对象
  */
-import {RECEIVE_ADDRESS,RECEIVE_CATEGORYS,RECEIVE_SHOPS, RECEIVE_USER} from './mutation-types'
+import {
+  RECEIVE_ADDRESS,
+  RECEIVE_CATEGORYS,
+  RECEIVE_SHOPS,
+  RECEIVE_USER,
+  RESET_USER
+} from './mutation-types'
 
 export default {
 
@@ -22,9 +28,14 @@ export default {
     state.shops = shops  //shops必须外部传入，即commit得传进来
   },
 
-  //更新用户信息
+  //更新用户信息user
   [RECEIVE_USER](state ,{user}){
     state.user = user
+  },
+
+  //重置用户信息user
+  [RESET_USER](state){
+    state.user = {}
   }
 
 }

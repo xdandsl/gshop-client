@@ -135,8 +135,8 @@
             return MessageBox.alert('请输入正确的用户名')
           }else if(!pwd.trim()){
             return MessageBox.alert('请输入密码')
-          }else if(!captcha.trim()){
-            return MessageBox.alert('请输入图形验证码')
+          }else if(captcha.length !== 4){
+            return MessageBox.alert('请输入4位图形验证码')
           }
           result = await reqPwdLogin({name ,pwd ,captcha})
         }

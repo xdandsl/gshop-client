@@ -3,6 +3,7 @@
  */
 
 import Vue from 'vue'
+import { Button } from 'mint-ui'
 import App from './App.vue'
 import router from './router/index'
 import NavHeader from './components/NavHeader/NavHeader.vue'
@@ -12,6 +13,8 @@ import Stars from './components/Stars/Stars.vue'
 //注册全局组件，需要的地方直接引入即可
 Vue.component('NavHeader', NavHeader)
 Vue.component('Stars', Stars)
+//注册全局组件
+Vue.component(Button.name, Button);
 
 new Vue({
   el: '#app',

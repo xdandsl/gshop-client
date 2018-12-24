@@ -5,8 +5,14 @@
  * 2，发送完请求，根据结果提交到mutation函数，更新状态数据
  */
 
-import {RECEIVE_ADDRESS, RECEIVE_CATEGORYS, RECEIVE_SHOPS , RECEIVE_USER} from './mutation-types'
-import {reqAddress, reqCategorys, reqShops} from '../api/index'
+import {
+  RECEIVE_ADDRESS,
+  RECEIVE_CATEGORYS,
+  RECEIVE_SHOPS,
+  RECEIVE_USER,
+  RESET_USER
+}from './mutation-types'
+import {reqAddress, reqCategorys, reqShops , logout , reqUserInfo} from '../api/index'
 
 export default {
   // 1,异步获取地址信息
@@ -50,5 +56,21 @@ export default {
   //4，保存用户信息
   saveInfo({commit},user){
     commit(RECEIVE_USER , {user})
+  },
+  //5,异步根据会话获取用户信息
+  async reqUserInfo({commit}){
+   const result = await reqUserInfo()
+    if(result.code === 0){
+     const user = result.data
+      commit(RECEIVE_USER, {user})
+    }
+  },
+
+  //5,异步重置user
+  async resetUser({commit}){
+    const result = await logout()
+    if(result.code===0) {
+      commit(RESET_USER)
+    }
   }
 }

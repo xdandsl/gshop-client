@@ -13,6 +13,10 @@
   export default {
     components: {
       FooterGuide
+    },
+    mounted(){
+      //实现自动登陆
+      this.$store.dispatch('reqUserInfo')
     }
   }
 </script>
