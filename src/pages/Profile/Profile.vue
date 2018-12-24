@@ -4,17 +4,20 @@
   <section class="profile">
     <NavHeader title="我的"/>
     <section class="profile-number">
-      <a href="javascript:" class="profile-link" @click="$router.replace('/login')">
+      <a href="javascript:" class="profile-link" @click="$router.replace(user._id ? '/userinfo' : '/login') ">
         <div class="profile_image">
           <i class="iconfont icon-person"></i>
         </div>
-        <div class="user-info">
-          <p class="user-info-top">登录/注册</p>
-          <p>
-                <span class="user-icon">
-                  <i class="iconfont icon-shouji icon-mobile"></i>
-                </span>
-            <span class="icon-mobile-number">暂无绑定手机号</span>
+        <div class="user-info" >
+          <!--如何实现使用手机号登陆：显示手机号。-->
+          <p class="user-info-top" v-if="!user.phone">
+            {{user.name ? user.name : '登录/注册'}}
+          </p>
+          <p v-if="!user.name">
+            <span class="user-icon">
+              <i class="iconfont icon-shouji icon-mobile"></i>
+            </span>
+            <span class="icon-mobile-number">{{user.phone ? user.phone : '暂无绑定手机号'}}</span>
           </p>
         </div>
         <span class="arrow">
@@ -95,7 +98,12 @@
 
 <!--js模块对象-->
 <script>
-  export default {}
+  import {mapState} from 'vuex'
+  export default {
+    computed: {
+      ...mapState(['user'])
+    }
+  }
 </script>
 
 <!--样式-->

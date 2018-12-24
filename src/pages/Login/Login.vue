@@ -20,7 +20,7 @@
               </button>
             </section>
             <section class="login_verification">
-              <input type="tel" maxlength="8" placeholder="验证码">
+              <input type="tel" maxlength="8" placeholder="验证码" v-model="code">
             </section>
             <section class="login_hint">
               温馨提示：未注册硅谷外卖帐号的手机号，登录时将自动注册，且代表已同意
@@ -30,22 +30,22 @@
           <div :class="{on: !loginWay}">
             <section>
               <section class="login_message">
-                <input type="tel" maxlength="11" placeholder="手机/邮箱/用户名">
+                <input type="tel" maxlength="11" placeholder="手机/邮箱/用户名" v-model="name">
               </section>
               <section class="login_verification" :class="{on: isShowPwd}" @click="isShowPwd=!isShowPwd">
-                <input :type="isShowPwd ? 'text': 'password'" maxlength="8" placeholder="密码">
+                <input :type="isShowPwd ? 'text': 'password'" maxlength="8" placeholder="密码" v-model="pwd">
                 <div class="switch_button" :class="isShowPwd ? 'on' : 'off'">
                   <div class="switch_circle" :class="{right:isShowPwd}"></div>
                   <span class="switch_text">{{isShowPwd ? 'abc': ''}}</span>
                 </div>
               </section>
               <section class="login_message">
-                <input type="text" maxlength="11" placeholder="验证码">
+                <input type="text" maxlength="11" placeholder="验证码" v-model="captcha">
                 <img ref="captcha" class="get_verification" src="http://localhost:5000/captcha" alt="captcha" @click="updateCaptcha">
               </section>
             </section>
           </div>
-          <button class="login_submit">登录</button>
+          <button class="login_submit" @click.prevent="login">登录</button>
         </form>
         <a href="javascript:;" class="about_us">关于我们</a>
       </div>
@@ -58,7 +58,7 @@
 
 <!--js模块对象-->
 <script>
-  import {reqSendCode} from '../../api/index'
+  import {reqSendCode,reqPwdLogin,reqSmsLogin} from '../../api/index'
   import { MessageBox, Toast} from 'mint-ui'
 
   export default {
@@ -66,8 +66,12 @@
       return {
         loginWay: true, //登陆的方式
         phoneNumber: '', //手机号
-        computeTime: 0,
-        isShowPwd: false
+        code: '', //验证码
+        name: '',//用户名
+        pwd: '', //密码
+        captcha: '', //图片验证码
+        computeTime: 0, //倒计时时间
+        isShowPwd: false ,//是否显示密码
       }
     },
     computed: {
@@ -78,7 +82,7 @@
       }
     },
     methods: {
-      //发送验证码
+      //点击发送验证码
       async sendCode(){
         this.computeTime = 30
         //每隔一秒减1秒
@@ -108,6 +112,46 @@
         //如何获取img元素
         //设置src属性，路径发生变化：携带时间戳，浏览器会自动发送请求获取新图片
         this.$refs.captcha.src = `http://localhost:5000/captcha?time=${Date.now()}`
+      },
+
+      //点击登陆按钮
+      async login(){
+        const {loginWay,phoneNumber,code,name,pwd,captcha,isRightNumber} = this
+        let result
+        //1,执行表单验证
+        if(loginWay){
+          //手机号登陆（手机号是否正确/验证码是否是6位）
+          if(!isRightNumber){
+            return MessageBox.alert('请输入正确的手机号')
+          }else if(!/^\d{6}$/.test(code)){
+            return MessageBox.alert('请输入正确的验证码')
+          }
+          //发送请求（暂时不用保存到状态数据中）
+          result = await reqSmsLogin(phoneNumber , code)
+//          console.log(result)
+        }else{
+          //密码登陆
+          if(!name.trim()){
+            return MessageBox.alert('请输入正确的用户名')
+          }else if(!pwd.trim()){
+            return MessageBox.alert('请输入密码')
+          }else if(!captcha.trim()){
+            return MessageBox.alert('请输入图形验证码')
+          }
+          result = await reqPwdLogin({name ,pwd ,captcha})
+        }
+
+        //根据结果，
+        if(result.code === 0){
+        // 登陆成功,1，保存数据到vuex中（因为个人中心页面可能会用到返回的name或者phone），2，去profile页面，
+          this.$store.dispatch('saveInfo',result.data)
+          this.$router.replace('/profile')
+
+        }else if(result.code === 1){
+          //登陆失败，提示错误信息
+          MessageBox.alert(result.msg)
+
+        }
       }
     }
   }

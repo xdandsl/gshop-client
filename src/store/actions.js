@@ -5,7 +5,7 @@
  * 2，发送完请求，根据结果提交到mutation函数，更新状态数据
  */
 
-import {RECEIVE_ADDRESS, RECEIVE_CATEGORYS, RECEIVE_SHOPS} from './mutation-types'
+import {RECEIVE_ADDRESS, RECEIVE_CATEGORYS, RECEIVE_SHOPS , RECEIVE_USER} from './mutation-types'
 import {reqAddress, reqCategorys, reqShops} from '../api/index'
 
 export default {
@@ -45,7 +45,10 @@ export default {
       commit(RECEIVE_SHOPS, {shops})
     }
 
+  },
+
+  //4，保存用户信息
+  saveInfo({commit},user){
+    commit(RECEIVE_USER , {user})
   }
-
-
 }

@@ -11,4 +11,5 @@ export default {
   address: {}, //地址信息
   categorys: [], //食品分类信息数组
   shops: [], //商铺信息数组
+  user: {} //用户信息
 }
