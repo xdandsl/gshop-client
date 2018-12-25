@@ -7,6 +7,7 @@ import { Button } from 'mint-ui'
 import App from './App.vue'
 import router from './router/index'
 import NavHeader from './components/NavHeader/NavHeader.vue'
+import CartControl from './components/CartControl/CartControl.vue'
 import store from './store/index'
 import Stars from './components/Stars/Stars.vue'
 
@@ -15,6 +16,7 @@ import './mock/mockServer'  //让模拟数据接口的文件执行一遍
 //注册全局组件，需要的地方直接引入即可
 Vue.component('NavHeader', NavHeader)
 Vue.component('Stars', Stars)
+Vue.component('CartControl', CartControl)
 //注册全局组件
 Vue.component(Button.name, Button);
 
