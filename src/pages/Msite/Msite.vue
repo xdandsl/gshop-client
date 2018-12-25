@@ -4,10 +4,11 @@
     <!--首页头部-->
     <NavHeader :title="address.name">
       <span class="header_search" slot="left">
-        <i class="iconfont icon-sousuo"></i>
+        <i class="iconfont icon-sousuo" @click="$router.push('/search')"></i>
       </span>
       <span class="header_login" slot="right">
-        <span class="header_login_text">登录|注册</span>
+        <span class="header_login_text" v-if="!user._id" @click="$router.push('/login')">登录|注册</span>
+        <i class="iconfont icon-person" v-else @click="$router.push('/userinfo')"></i>
       </span>
     </NavHeader>
     <!--首页导航-->
@@ -50,7 +51,12 @@
 
     },
     computed: {
-      ...mapState(['address','categorys']),
+//      ...mapState(['address','categorys']),
+      ...mapState({
+        address: state => state.msite.address , //state代表总状态  msite代表子的state
+        categorys: state => state.msite.categorys,
+        user: state => state.user.user
+      }),
 
       //得到一个二维数组，然后去遍历显示食品信息
       categorysArr(){

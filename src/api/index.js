@@ -35,3 +35,8 @@ export const logout = () => ajax(BASE + '/logout')
 
 //9,### 根据会话获取用户信息
 export const reqUserInfo =() => ajax(BASE + '/userinfo')
+
+//请求mock模拟的数据接口。注意：不用代理。直接就能请求到
+export const reqGoods = () => ajax('/goods')
+export const reqRatings = () => ajax('/ratings')
+export const reqInfo = () => ajax('/info')

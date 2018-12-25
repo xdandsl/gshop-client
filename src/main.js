@@ -10,6 +10,8 @@ import NavHeader from './components/NavHeader/NavHeader.vue'
 import store from './store/index'
 import Stars from './components/Stars/Stars.vue'
 
+import './mock/mockServer'  //让模拟数据接口的文件执行一遍
+
 //注册全局组件，需要的地方直接引入即可
 Vue.component('NavHeader', NavHeader)
 Vue.component('Stars', Stars)
