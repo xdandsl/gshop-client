@@ -3,9 +3,9 @@
   <div>
     <div class="goods">
       <div class="menu-wrapper">
-        <ul>
+        <ul ref="leftUl">
           <!--current类-->
-          <li class="menu-item" v-for="(good,index) in goods" :key="index">
+          <li class="menu-item" v-for="(good,index) in goods" :key="index" :class="{current: currentIndex === index}" @click="clickItem(index)">
             <span class="text bottom-border-1px">
               <img class="icon" :src="good.icon" v-if="good.icon">
               {{good.name}}
@@ -14,12 +14,12 @@
         </ul>
       </div>
       <div class="foods-wrapper">
-        <ul>
+        <ul ref="rightUl">
           <!--每一个food-->
           <li class="food-list-hook" v-for="(good,index) in goods" :key="index">
             <h1 class="title">{{good.name}}</h1>
             <ul>
-              <li class="food-item bottom-border-1px" v-for="(food,index) in good.foods" :key="index">
+              <li class="food-item bottom-border-1px" v-for="(food,index) in good.foods" :key="index" @click="showFood(food)">
                 <div class="icon">
                   <img width="57" height="57"
                        :src="food.image">
@@ -41,34 +41,10 @@
               </li>
             </ul>
           </li>
-          <!--<li class="food-list food-list-hook">-->
-            <!--<h1 class="title">香浓甜粥</h1>-->
-            <!--<ul>-->
-              <!--<li class="food-item bottom-border-1px">-->
-                <!--<div class="icon">-->
-                  <!--<img width="57" height="57" src="http://fuss10.elemecdn.com/6/72/cb844f0bb60c502c6d5c05e0bddf5jpeg.jpeg?imageView2/1/w/114/h/114">-->
-                <!--</div>-->
-                <!--<div class="content">-->
-                  <!--<h2 class="name">红枣山药粥</h2>-->
-                  <!--<p class="desc">红枣山药糙米粥,素材包</p>-->
-                  <!--<div class="extra">-->
-                    <!--<span class="count">月售17份</span>-->
-                    <!--<span>好评率100%</span>-->
-                  <!--</div>-->
-                  <!--<div class="price">-->
-                    <!--<span class="now">￥29</span>-->
-                    <!--<span class="old">￥36</span>-->
-                  <!--</div>-->
-                  <!--<div class="cartcontrol-wrapper">-->
-                    <!--CartControl组件-->
-                  <!--</div>-->
-                <!--</div>-->
-              <!--</li>-->
-            <!--</ul>-->
-          <!--</li>-->
         </ul>
       </div>
     </div>
+    <Food :food="food" ref="food"/>
   </div>
 </template>
 
@@ -76,13 +52,18 @@
 <script>
   import {mapState} from 'vuex'
   import BScroll from 'better-scroll'
+  import Food from '../../../components/Food/Food.vue'
 
   export default {
+    components: {
+      Food
+    },
     mounted(){
       //获取食品分类的goods数据
       this.$store.dispatch('getGoods',()=> {
         this.$nextTick(() => {
           this._initBScroll()
+          this._initTops()
         })
       })
 
@@ -92,20 +73,92 @@
 //        this._initBScroll()
 //      })
     },
+    data(){
+      return {
+        scrollY: 0,
+        tops: [],
+        food: {}
+      }
+    },
     computed: {
       ...mapState({
         goods: state => state.shop.goods
-      })
+      }),
+
+      //左侧分类的当前小标
+      currentIndex(){
+        const {scrollY ,tops } = this
+        const index = tops.findIndex((top,index) => {
+          //scrollY在[top,nextTop）之间的返回
+          return scrollY >= top && scrollY < tops[index+1]
+
+        })
+        //如何知道currentIndex发生变化
+        if(index!=this.index && this.leftScroll) { // 产生了一个新的index
+          // 保存新的index
+          this.index = index
+          // 当currentIndex发生改变时,将左侧列表进行编码滑动(尽量让当前分类滑动到最上面)
+          const li = this.$refs.leftUl.children[index]
+          this.leftScroll.scrollToElement(li, 300)
+        }
+
+        return index
+      }
     },
     methods: {
 //     加_是为了区别一般的事件回调函数
       _initBScroll(){
-        new BScroll('.menu-wrapper',{
+        this.leftScroll = new BScroll('.menu-wrapper',{
+          // better-scroll 默认会阻止浏览器的原生 click 事件。当设置为 true，better-scroll 会派发一个 click 事件
           click: true
         })
-        new BScroll('.foods-wrapper', {
-          click: true
+
+        this.rigthScroll = new BScroll('.foods-wrapper', {
+          click: true,
+          probeType: 2
         })
+        //给右侧列表ul的scroll对象绑定监听
+        this.rigthScroll.on('scroll' , ({x,y}) => {
+//          console.log(y)
+          this.scrollY = Math.abs(y)
+        }),
+        // 监视右侧列表滑动结束
+        this.rigthScroll.on('scrollEnd',({x,y}) => {
+//          console.log(y)
+          this.scrollY = Math.abs(y)
+        })
+
+
+      },
+
+      //dom初始化完成就去执行
+      _initTops(){
+        //计算食物列表的每一个li的高度
+        const lis = this.$refs.rightUl.children  //获取所有li(伪数组中)
+        const tops = []
+        let top = 0
+        tops.push(top)
+        Array.prototype.slice.call(lis).forEach((li,index) => {
+          top += li.clientHeight
+          tops.push(top)
+        })
+//        console.log(tops)
+        this.tops = tops
+      },
+
+      clickItem(index){
+        //根据点击的左侧的索引找到右侧对应的top值
+         const y =-this.tops[index]
+        //赋值给scrollY
+        this.scrollY = Math.abs(y)
+
+        this.rigthScroll.scrollTo(0, y, 300)
+      },
+
+      showFood(food){
+        this.food = food
+        //调用food组件的toggleShow方法
+        this.$refs.food.toggleShow()
       }
     }
   }
@@ -118,7 +171,7 @@
   .goods
     display: flex
     position: absolute
-    top: 275px
+    top: 225px
     bottom: 46px
     width: 100%
     background: #fff;

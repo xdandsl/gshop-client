@@ -2,10 +2,10 @@
 <template>
   <div class="cartcontrol">
     <transition name="fade">
-      <div class="iconfont icon-remove_circle_outline" v-if="food.count>0" @click="updateCount(false)"></div>
+      <div class="iconfont icon-remove_circle_outline" v-if="food.count>0" @click.stop="updateCount(false)"></div>
     </transition>
     <div class="cart-count" v-if="food.count>0">{{food.count}}</div>
-    <div class="iconfont icon-add_circle" @click="updateCount(true)"></div>
+    <div class="iconfont icon-add_circle" @click.stop="updateCount(true)"></div>
   </div>
 </template>
 
