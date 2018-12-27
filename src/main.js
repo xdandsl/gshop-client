@@ -10,6 +10,7 @@ import NavHeader from './components/NavHeader/NavHeader.vue'
 import CartControl from './components/CartControl/CartControl.vue'
 import store from './store/index'
 import Stars from './components/Stars/Stars.vue'
+import Split from './components/Split/Split.vue'
 
 import './mock/mockServer'  //让模拟数据接口的文件执行一遍
 
@@ -17,6 +18,7 @@ import './mock/mockServer'  //让模拟数据接口的文件执行一遍
 Vue.component('NavHeader', NavHeader)
 Vue.component('Stars', Stars)
 Vue.component('CartControl', CartControl)
+Vue.component('Split', Split)
 //注册全局组件
 Vue.component(Button.name, Button);
 

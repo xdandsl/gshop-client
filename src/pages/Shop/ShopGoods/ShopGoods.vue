@@ -43,6 +43,7 @@
           </li>
         </ul>
       </div>
+      <shop-cart/>
     </div>
     <Food :food="food" ref="food"/>
   </div>
@@ -53,10 +54,11 @@
   import {mapState} from 'vuex'
   import BScroll from 'better-scroll'
   import Food from '../../../components/Food/Food.vue'
-
+  import ShopCart from '../../../components/ShopCart/ShopCart.vue'
   export default {
     components: {
-      Food
+      Food,
+      ShopCart
     },
     mounted(){
       //获取食品分类的goods数据
