@@ -13,6 +13,7 @@ import Stars from './components/Stars/Stars.vue'
 import Split from './components/Split/Split.vue'
 
 import './mock/mockServer'  //让模拟数据接口的文件执行一遍
+import './filters/index'
 
 //注册全局组件，需要的地方直接引入即可
 Vue.component('NavHeader', NavHeader)

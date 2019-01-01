@@ -1,7 +1,10 @@
 <!--模板页面-->
 <template>
     <div>
-      <router-view/>
+      <!--缓存路由组件对象-->
+      <keep-alive>
+        <router-view/>
+      </keep-alive>
       <FooterGuide></FooterGuide>
     </div>
 </template>

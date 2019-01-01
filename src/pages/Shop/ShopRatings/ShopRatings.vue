@@ -50,7 +50,7 @@
                   <span class="iconfont" :class="rating.rateType===0?'icon-thumb_up':'icon-thumb_down'"></span>
                   <span class="item" v-for="(item, index) in rating.recommend" :key="index">{{item}}</span>
                 </div>
-                <div class="time">2016-12-11 12:02:13</div>
+                <div class="time">{{rating.rateTime | date-format('HH:mm:ss')}}</div>
               </div>
             </li>
           </ul>
@@ -109,13 +109,15 @@
     },
     mounted(){
       //分发获取ratings的action
-      this.$store.dispatch('getRatings')
-      this.$nextTick(() => {
-        //创建scroll对象，
-        new BScroll('.ratings', {
-          click: true
+      this.$store.dispatch('getRatings',() => {
+        this.$nextTick(() => {
+          //创建scroll对象，
+          new BScroll('.ratings', {
+            click: true
+          })
         })
       })
+
     },
     methods: {
       setSelectType(type){

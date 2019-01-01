@@ -31,12 +31,13 @@ const actions = {
    typeof cb === 'function' && cb()
   },
   //获取ratings
-  async getRatings({commit}){
+  async getRatings({commit},cb){
     const result = await reqRatings()
     const ratings = result.data
     if(result.code === 0){
       commit(RECEIVE_RATINGS , {ratings})
     }
+    typeof cb === 'function' && cb()
   },
   //获取info
   async getInfo({commit}){
